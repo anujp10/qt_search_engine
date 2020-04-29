@@ -18,19 +18,6 @@
   <property name="windowTitle">
    <string>search</string>
   </property>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>70</y>
-     <width>781</width>
-     <height>401</height>
-    </rect>
-   </property>
-   <property name="plainText">
-    <string/>
-   </property>
-  </widget>
   <widget class="QPushButton" name="Find">
    <property name="geometry">
     <rect>
@@ -54,17 +41,14 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>500</y>
-     <width>761</width>
-     <height>21</height>
+     <x>90</x>
+     <y>60</y>
+     <width>781</width>
+     <height>541</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>Click Here</string>
    </property>
   </widget>
  </widget>

@@ -6,29 +6,16 @@
 #include <map>
 #include <QLabel>
 #include <QDesktopServices>
+#include <QInputDialog>
 
-void search::display() {
-    //ui->plainTextEdit->setPlainText("Not Hello");
-    ui->label->setText("https://www.usc.edu/");
-    ui->label->setTextFormat(Qt::RichText);
-    ui->label->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    //ui->label->setOpenExternalLinks(true);
-}
+std::vector<string> lines;
 
 search::search(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::search)
 {
+    loadTextFile();
     ui->setupUi(this);
-    //connect(ui->Find, SIGNAL (released()), this, SLOT(display()));
-    QString link = "A time-multiplexed FPGA";
-    //ui->label->setTextFormat(Qt::RichText);
-    //ui->label->setOpenExternalLinks(true);
-    //ui->label->setText("https://www.usc.edu/");
-    //QObject::connect(ui->label, &QLabel::linkActivated, [](const QString & link) {
-    QDesktopServices::openUrl(QUrl(link));
-    //});
-    loadTextFile();    
 }
 
 search::~search()
@@ -39,81 +26,38 @@ search::~search()
 
 void search::on_Find_clicked()
 {
-    publication p;
-    QString searchString = ui->lineEdit->text();
-    std::string searchKeyword = searchString.toUtf8().constData();
-    vector<string> paper_title=p.format_input(searchKeyword);
-    map<int,vector<vector<string>>> m1 = p.title_search(paper_title);
-    //cout<<"Search results:==>>"<<endl;
-    string out;
-    QString output;
-    if(m1.empty())
-         ui->plainTextEdit->setPlainText("Not found");
-    else
-    {
-        for(auto it=m1.rbegin();it!=m1.rend();it++) //highest frequency match displayed first
-        {
-            for(auto& it1:(*it).second)
-            {
-                for(auto& it2:it1) {
-                    out += it2;
-                }
-            }
-            //if(((*it).first)==int(paper_title.size())) //perfect frequency match found, only display that title
-             //   break;
-        }
-        output = QString::fromStdString(out);
-        ui->plainTextEdit->setPlainText(output);
-        //ui->plainTextEdit->setPlainText("https://www.usc.edu/");
-        //QLabel *myLabel = new QLabel(this);
+    BST b(lines);
+    QString searchQString = ui->lineEdit->text();
+    std::string searchstring = searchQString.toUtf8().constData();
 
+    b.find(searchstring);
+    std::vector<pair<std::string, std::string>> v = b.results;
+    string results = std::to_string(v.size()) + " results found";
+    QString qresults = QString::fromStdString(results);
+    ui->textBrowser->setText(qresults);
 
-        //connect (ui->Find, SIGNAL(search::on_Click()), ui->label, SLOT(search::displayFile()));
+    for (auto it=v.rbegin();it!=v.rend();it++) {
+        string output = it->first;
+        QString qoutput = QString::fromStdString(output);
+        string urllink = it->second;
+        QString qurllink = QString::fromStdString(urllink);
+        QString outputdata = "<a href=\"" + qurllink + "\">" + qoutput + "</a>";
+        ui->textBrowser->setOpenExternalLinks(true);
+        if (it == v.rbegin())
+            ui->textBrowser->setText(outputdata);
+        else
+            ui->textBrowser->append(outputdata);
     }
-
-    //ui->textEdit->find(searchString, QTextDocument::FindWholeWords);
-    //connect(ui->Find, SIGNAL (released()), this, SLOT(displayFile()));
-
-    //QString link = "https://www.usc.edu/";
-    //ui->label->setTextFormat(Qt::RichText);
-    //ui->label->setOpenExternalLinks(true);
-    //ui->label->setText("https://www.usc.edu/");
-    //QObject::connect(ui->label, &QLabel::linkActivated, [](const QString & link) {
-    //QDesktopServices::openUrl(QUrl("https://www.usc.edu/"));
 }
 
-void search::loadTextFile()
-{
-    QFile inputFile(":/input_text.txt");
+void search::loadTextFile() {
+    QFile inputFile(":/title_url.txt");
     inputFile.open(QIODevice::ReadOnly);
-
     QTextStream in(&inputFile);
-    QString line = in.readAll();
+    while (!in.atEnd()) {
+        QString Qline = in.readLine();
+        std::string line = Qline.toUtf8().constData();
+        lines.push_back(line);
+    }
     inputFile.close();
-    //ui->textEdit->setPlainText(line);
-    //QTextCursor cursor = ui->textEdit->textCursor();
-    //cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
-}
-
-void search::displayFile() {
-    //ui->plainTextEdit->setPlainText("Not Hello");
-    ui->label->setText("https://www.usc.edu/");
-    ui->label->setTextFormat(Qt::RichText);
-    ui->label->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    ui->label->setOpenExternalLinks(true);
-    //ui->label->mousePressEvent();
-}
-
-
-
-//void search::on_Click() {
-
-//}
-
-void search::on_plainTextEdit_cursorPositionChanged()
-{
-    ui->label->setText("https://ieeexplore.ieee.org/abstract/document/624601");
-    QObject::connect(ui->label, &QLabel::linkActivated, [](const QString & link) {
-    QDesktopServices::openUrl(QUrl(link));
-});
 }
