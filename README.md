@@ -1,9 +1,9 @@
-Description of the project:
-	Developing Academic Search Engine using C++ and Qt. This project intends to create a search engine 
+## Description of the project:
+	Develop an academic search engine using C++ and Qt framework. This project intends to create a search engine 
 	that will search for resources in USC like publications, research papers, journals, conference proceedings, etc.
-	We want to use the qt framework to create a simple UI over the C++ application.
+	Use the Qt framework to create a simple UI over the C++ application.
 
-Features:
+## Features:
 	The developed system supports the following features:
 		•	This system supports full title search, partial title search, and keyword-based search, with no restriction 
 		on improper spacing or incorrect case of alphabets
