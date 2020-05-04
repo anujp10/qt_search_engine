@@ -26,27 +26,33 @@ search::~search()
 
 void search::on_Find_clicked()
 {
-    BST b(lines);
+    Publication b(lines);
     QString searchQString = ui->lineEdit->text();
     std::string searchstring = searchQString.toUtf8().constData();
 
     b.find(searchstring);
-    std::vector<pair<std::string, std::string>> v = b.results;
-    string results = std::to_string(v.size()) + " results found";
-    QString qresults = QString::fromStdString(results);
-    ui->textBrowser->setText(qresults);
+    std::map <int, std::vector<pair<std::string, std::string>>> v = b.results;
+    unordered_set<string> display_title;
+    ui->textBrowser->clear();
 
-    for (auto it=v.rbegin();it!=v.rend();it++) {
-        string output = it->first;
-        QString qoutput = QString::fromStdString(output);
-        string urllink = it->second;
-        QString qurllink = QString::fromStdString(urllink);
-        QString outputdata = "<a href=\"" + qurllink + "\">" + qoutput + "</a>";
-        ui->textBrowser->setOpenExternalLinks(true);
-        if (it == v.rbegin())
-            ui->textBrowser->setText(outputdata);
-        else
-            ui->textBrowser->append(outputdata);
+    if (v.size() == 0) {
+        ui->textBrowser->setText("No results found");
+    }
+
+    for (auto it = v.rbegin(); it != v.rend(); it++) {
+        for (auto it1 : it->second) {
+            if(!display_title.count((it1).first)) {
+                string output = it1.first;
+                QString qoutput = QString::fromStdString(output);
+                string urllink = it1.second;
+                QString qurllink = QString::fromStdString(urllink);
+                QString outputdata = "<a href=\"" + qurllink + "\">" + qoutput + "</a>";
+                ui->textBrowser->setOpenExternalLinks(true);
+                ui->textBrowser->append(outputdata);
+
+                display_title.insert((it1).first);
+            }
+        }
     }
 }
 
