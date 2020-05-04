@@ -15,4 +15,4 @@ Features:
 		•	For partial title or multiple keyword-based searches from a user, the closest results displayed earlier
 		(higher in the page) in the list of results displayed
 	
-For further details, please refer to "User_guide.pdf" in the project.
+For further details, please refer to [User_guide.pdf](https://github.com/anujp10/qt_search_engine/blob/master/User_guide.pdf) in the project.
