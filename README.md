@@ -10,3 +10,4 @@ Develop an academic search engine using C++ and Qt framework. This project inten
 - For partial title or multiple keyword-based searches from a user, the closest results displayed earlier (higher in the page) in the list of results displayed.
 	
 For further details, please refer to [User_guide](https://github.com/anujp10/qt_search_engine/blob/master/User_guide.pdf) in the project.
+You can watch a short demonstration on the project [here](https://youtu.be/fVp7u6d8Goc).  
